@@ -1,0 +1,49 @@
+# Render Blueprint: a TEMPORARY, free preview of the backend (API + admin portal + database).
+# Not for production: free services sleep after 15 minutes, lose local files, block SMTP,
+# and the free database expires after 30 days. See docs/VERCEL_PREVIEW.md.
+databases:
+  - name: suremedra-db
+    plan: free
+    region: singapore
+    databaseName: suremedra
+    user: suremedra
+
+services:
+  - type: web
+    name: suremedra-api
+    runtime: docker
+    plan: free
+    region: singapore
+    dockerfilePath: ./backend/Dockerfile
+    dockerContext: ./backend
+    # No separate release step on the free plan, so migrate + seed demo data when the service starts.
+    dockerCommand: sh -c "python manage.py migrate --noinput && python manage.py seed_demo && exec gunicorn config.wsgi:application --bind 0.0.0.0:$PORT --workers 1 --threads 4 --timeout 120 --log-level info --error-logfile -"
+    envVars:
+      - key: DATABASE_URL
+        fromDatabase:
+          name: suremedra-db
+          property: connectionString
+      - key: DJANGO_SECRET_KEY
+        generateValue: true
+      - key: DJANGO_DEBUG
+        value: "false"
+      - key: NUM_PROXIES
+        value: "1"
+      - key: LOG_LEVEL
+        value: INFO
+      # Free Render blocks SMTP, so emails are recorded (visible in Admin > Email logs) but not delivered.
+      - key: EMAIL_BACKEND
+        value: django.core.mail.backends.console.EmailBackend
+      # Everything arrives from Vercel's servers, so one IP: use generous limits for the demo.
+      - key: THROTTLE_ENQUIRY
+        value: 200/hour
+      - key: THROTTLE_ANON
+        value: 1000/min
+      - key: DEMO_ADMIN_USERNAME
+        value: admin
+      - key: DEMO_ADMIN_EMAIL
+        value: admin@example.com
+      - key: DEMO_ADMIN_PASSWORD
+        sync: false        # Render asks you for this value when you create the Blueprint
+      - key: COMPANY_NAME
+        value: Suremedra Enterprises Private Limited
