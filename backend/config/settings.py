@@ -23,7 +23,7 @@ if not SECRET_KEY:
     raise ImproperlyConfigured(
         "DJANGO_SECRET_KEY is not set. Copy .env.example to .env.example (development) or set it in .env.example.prod (production)."
     )
-ALLOWED_HOSTS = env.list("DJANGO_ALLOWED_HOSTS", default=["localhost", "127.0.0.1"] if DEBUG else [])
+ALLOWED_HOSTS = env.list("DJANGO_ALLOWED_HOSTS", default=["suremedra-api.onrender.com", "localhost", "127.0.0.1"] if DEBUG else [])
 CSRF_TRUSTED_ORIGINS = env.list("CSRF_TRUSTED_ORIGINS", default=[])
 
 SITE_URL = env("SITE_URL", default="http://localhost:3000")  # public website
