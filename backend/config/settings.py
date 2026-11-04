@@ -16,7 +16,7 @@ env = environ.Env()
 environ.Env.read_env(BASE_DIR / ".env.example")
 
 # ---------------------------------------------------------------- core ------
-DEBUG = env.bool("DJANGO_DEBUG", default=False)
+DEBUG = env.bool("DJANGO_DEBUG", default=True)
 TESTING = sys.argv[1:2] == ["test"]
 SECRET_KEY = env("DJANGO_SECRET_KEY", default="insecure-dev-key-change-me" if (DEBUG or TESTING) else "")
 if not SECRET_KEY:
