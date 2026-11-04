@@ -6,7 +6,7 @@ echo "Running database migrations..."
 python manage.py migrate --noinput
 
 echo "Seeding demo data..."
-python manage.py seed_demo
+python manage.py import_medicines sample_data/medicines_sample.csv
 
 echo "Starting Gunicorn..."
 
