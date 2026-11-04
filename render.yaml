@@ -47,3 +47,5 @@ services:
         sync: false        # Render asks you for this value when you create the Blueprint
       - key: COMPANY_NAME
         value: Suremedra Enterprises Private Limited
+      - key: ALLOWED_HOSTS
+        value: suremedra-api.onrender.com
