@@ -8,6 +8,9 @@ python manage.py migrate --noinput
 echo "Seeding demo data..."
 python manage.py import_medicines sample_data/medicines_sample.csv
 
+echo "Creating initial admin..."
+python manage.py create_admin
+
 echo "Starting Gunicorn..."
 
 exec gunicorn config.wsgi:application \
