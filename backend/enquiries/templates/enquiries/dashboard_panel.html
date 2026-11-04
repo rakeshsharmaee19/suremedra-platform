@@ -1,0 +1,16 @@
+{% if show %}
+<div class="module" style="margin-bottom:20px">
+  <table style="width:100%">
+    <caption>Enquiries &mdash; {{ new_count }} new, {{ unread_count }} unread notification(s)</caption>
+    {% for n in notifications %}
+    <tr>
+      <th scope="row" style="width:70%"><a href="{% url 'admin:enquiries_enquiry_change' n.enquiry_id %}">{{ n.title }}</a><br><small>{{ n.body }}</small></th>
+      <td>{{ n.created_at|timesince }} ago</td>
+    </tr>
+    {% empty %}
+    <tr><td>No unread notifications.</td></tr>
+    {% endfor %}
+    <tr><td colspan="2"><a href="{% url 'admin:enquiries_enquiry_changelist' %}?status__exact=new">View all new enquiries</a></td></tr>
+  </table>
+</div>
+{% endif %}

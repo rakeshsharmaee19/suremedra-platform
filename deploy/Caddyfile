@@ -1,0 +1,53 @@
+# Caddy gets and renews HTTPS certificates automatically (Let's Encrypt).
+{
+	email {$ACME_EMAIL}
+}
+
+# Public website: www.example.com (DOMAIN)
+{$DOMAIN} {
+	encode zstd gzip
+
+	header {
+		Strict-Transport-Security "max-age=31536000"
+		X-Content-Type-Options "nosniff"
+		Referrer-Policy "strict-origin-when-cross-origin"
+		-Server
+	}
+
+	# API calls and Django static files go to Django, everything else to Next.js.
+	@django path /api/* /static/*
+	handle @django {
+		reverse_proxy api:8000 {
+			header_up X-Request-ID {http.request.uuid}
+		}
+	}
+	handle {
+		reverse_proxy web:3000
+	}
+}
+
+# example.com (REDIRECT_DOMAIN) -> www.example.com
+{$REDIRECT_DOMAIN} {
+	redir https://{$DOMAIN}{uri} permanent
+}
+
+# Admin portal: admin.example.com (ADMIN_DOMAIN). Never cached, Django only.
+{$ADMIN_DOMAIN} {
+	encode zstd gzip
+
+	header {
+		Strict-Transport-Security "max-age=31536000"
+		X-Content-Type-Options "nosniff"
+		X-Robots-Tag "noindex, nofollow"
+		Cache-Control "no-store"
+		-Server
+	}
+
+	# Optional extra protection: only allow your office IP (uncomment and edit).
+	# @blocked not remote_ip 203.0.113.10
+	# respond @blocked "Forbidden" 403
+
+	reverse_proxy api:8000 {
+		header_up X-Request-ID {http.request.uuid}
+	}
+}

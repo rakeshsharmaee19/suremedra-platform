@@ -1,0 +1,16 @@
+# Local development helpers: PostgreSQL and Redis only. Run the Django and Next.js apps
+# directly on your machine (see README.md). Start with:  docker compose -f docker-compose.dev.yml up -d
+services:
+  db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: suremedra
+      POSTGRES_PASSWORD: suremedra
+      POSTGRES_DB: suremedra
+    ports: ["5432:5432"]
+    volumes: [dev_pgdata:/var/lib/postgresql/data]
+  redis:
+    image: redis:7-alpine
+    ports: ["6379:6379"]
+volumes:
+  dev_pgdata:

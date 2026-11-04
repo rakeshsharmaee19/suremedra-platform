@@ -1,0 +1,6 @@
+{% extends "admin/index.html" %}
+{% load enquiry_tags %}
+{% block content %}
+{% enquiry_panel %}
+{{ block.super }}
+{% endblock %}

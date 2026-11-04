@@ -1,0 +1,15 @@
+product_name,brand,type,pack_size,hsn_code,gst_rate,compositions,distributors,description,is_active
+Calpol 500,GSK,Tablet,10x10 tablets,30049099,12,Paracetamol:500 mg,Alpha Pharma Distributors,,true
+Crocin 500,GSK,Tablet,15 tablets,30049099,12,Paracetamol:500 mg,Alpha Pharma Distributors; Metro Healthcare,,true
+Dolo 650,Micro Labs,Tablet,15 tablets,30049099,12,Paracetamol:650 mg,Metro Healthcare,,true
+Augmentin 625,GSK,Tablet,10 tablets,30042019,12,Amoxicillin:500 mg; Clavulanic Acid:125 mg,Alpha Pharma Distributors,,true
+Mox 500,Ranbaxy,Capsule,10x10 capsules,30042019,12,Amoxicillin:500 mg,Metro Healthcare,,true
+Azithral 500,Alembic,Tablet,5 tablets,30042019,12,Azithromycin:500 mg,Metro Healthcare,,true
+Ascoril LS,Glenmark,Syrup,100 ml,30049099,12,Ambroxol:15 mg; Levosalbutamol:0.5 mg; Guaifenesin:50 mg,Alpha Pharma Distributors,,true
+Glycomet 500,USV,Tablet,20 tablets,30049099,12,Metformin:500 mg,Metro Healthcare,,true
+Ecosprin 75,USV,Tablet,14 tablets,30049099,12,Aspirin:75 mg,Alpha Pharma Distributors,,true
+Pantocid 40,Sun Pharma,Tablet,15 tablets,30049099,12,Pantoprazole:40 mg,Metro Healthcare,,true
+Pan 40 Inj,Alkem,Injection,1 vial,30049099,12,Pantoprazole:40 mg,Alpha Pharma Distributors,,true
+Betadine,Win-Medicare,Ointment,20 g,30049099,12,Povidone Iodine:5 %,Metro Healthcare,,true
+Becosules,Pfizer,Capsule,20 capsules,30049099,12,Vitamin B Complex,Alpha Pharma Distributors,,true
+Old Discontinued Syrup,Generic Labs,Syrup,100 ml,30049099,12,Paracetamol:125 mg/5ml,Metro Healthcare,,false

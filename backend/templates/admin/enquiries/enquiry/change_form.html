@@ -1,0 +1,5 @@
+{% extends "admin/change_form.html" %}
+{% block object-tools-items %}
+  {% if original %}<li><a href="{% url 'admin:enquiries_enquiry_generate_invoice' original.pk %}" class="addlink">Generate invoice</a></li>{% endif %}
+  {{ block.super }}
+{% endblock %}

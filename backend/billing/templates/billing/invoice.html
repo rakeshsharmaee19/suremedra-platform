@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<style>
+  @page { size: A4; margin: 18mm 15mm; }
+  body { font-family: "DejaVu Sans", Arial, sans-serif; font-size: 10pt; color: #1a1a1a; }
+  h1 { font-size: 18pt; margin: 0 0 4px 0; color: #1B4B43; }
+  .muted { color: #5a6472; }
+  .row { display: flex; justify-content: space-between; margin-bottom: 14px; }
+  table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+  th { background: #1B4B43; color: #fff; text-align: left; padding: 6px; font-size: 9pt; }
+  td { padding: 6px; border-bottom: 1px solid #ddd; vertical-align: top; }
+  .num { text-align: right; white-space: nowrap; }
+  .totals { width: 45%; margin-left: 55%; }
+  .totals td { border: none; padding: 3px 6px; }
+  .grand td { border-top: 2px solid #1B4B43; font-weight: bold; font-size: 11pt; }
+  .small { font-size: 8.5pt; }
+</style>
+</head>
+<body>
+  <div class="row">
+    <div>
+      <h1>{{ company.name }}</h1>
+      <div class="muted small">{{ company.address }}<br>
+      {% if company.gstin %}GSTIN: {{ company.gstin }}<br>{% endif %}
+      {{ company.email }}{% if company.phone %} | {{ company.phone }}{% endif %}</div>
+    </div>
+    <div style="text-align:right">
+      <h1 style="font-size:15pt">{{ invoice.get_doc_type_display|upper }}</h1>
+      <div>No: <strong>{{ invoice.number }}</strong></div>
+      <div>Date: {{ invoice.issued_at|date:"d M Y" }}</div>
+      <div>Enquiry ref: {{ invoice.enquiry.reference }}</div>
+    </div>
+  </div>
+
+  <div style="margin-bottom:10px">
+    <div class="muted small">BILL TO</div>
+    <strong>{{ invoice.buyer_company|default:invoice.buyer_name }}</strong><br>
+    {% if invoice.buyer_company %}Attn: {{ invoice.buyer_name }}<br>{% endif %}
+    {% if invoice.buyer_address %}{{ invoice.buyer_address|linebreaksbr }}<br>{% endif %}
+    {{ invoice.buyer_country }}<br>{{ invoice.buyer_email }}{% if invoice.buyer_phone %} | {{ invoice.buyer_phone }}{% endif %}
+  </div>
+
+  <table>
+    <thead><tr>
+      <th>#</th><th>Description</th><th>HSN</th><th class="num">Qty</th><th class="num">Unit price</th>
+      <th class="num">GST %</th><th class="num">Amount</th>
+    </tr></thead>
+    <tbody>
+    {% for line in lines %}
+      <tr>
+        <td>{{ forloop.counter }}</td>
+        <td>{{ line.description }}</td>
+        <td>{{ line.hsn_code }}</td>
+        <td class="num">{{ line.quantity }} {{ line.unit }}</td>
+        <td class="num">{{ line.unit_price }}</td>
+        <td class="num">{{ line.gst_rate }}</td>
+        <td class="num">{{ line.line_total }}</td>
+      </tr>
+    {% endfor %}
+    </tbody>
+  </table>
+
+  <table class="totals">
+    <tr><td>Subtotal</td><td class="num">{{ invoice.currency }} {{ invoice.subtotal }}</td></tr>
+    <tr><td>{% if invoice.tax_treatment == "export_zero" %}GST (export, zero-rated){% else %}GST{% endif %}</td><td class="num">{{ invoice.currency }} {{ invoice.tax_total }}</td></tr>
+    <tr class="grand"><td>Total</td><td class="num">{{ invoice.currency }} {{ invoice.total }}</td></tr>
+  </table>
+
+  {% if invoice.notes %}<p class="small"><strong>Notes:</strong> {{ invoice.notes|linebreaksbr }}</p>{% endif %}
+  {% if company.bank_details %}<p class="small"><strong>Bank details:</strong><br>{{ company.bank_details|linebreaksbr }}</p>{% endif %}
+  <p class="small muted">{{ company.invoice_terms }}</p>
+</body>
+</html>

@@ -1,0 +1,34 @@
+{% extends "admin/base_site.html" %}
+{% block breadcrumbs %}
+<div class="breadcrumbs"><a href="{% url 'admin:index' %}">Home</a> &rsaquo; <a href="{% url 'admin:enquiries_enquiry_changelist' %}">Enquiries</a> &rsaquo; <a href="{{ change_url }}">{{ enquiry.reference }}</a> &rsaquo; Generate invoice</div>
+{% endblock %}
+{% block content %}
+<div id="content-main">
+  <p>Buyer: <strong>{{ enquiry.buyer_name }}</strong> {% if enquiry.buyer_company %}({{ enquiry.buyer_company }}){% endif %} &mdash; {{ enquiry.buyer_email }}</p>
+  {% if error %}
+    <ul class="messagelist"><li class="error">{{ error }}</li></ul>
+    <p><a href="{{ change_url }}">&larr; Back to the enquiry to fix the lines</a></p>
+  {% else %}
+    <h2>Invoice preview</h2>
+    <table style="width:100%">
+      <thead><tr><th>Description</th><th>Qty</th><th>Unit price</th><th>GST %</th><th>Amount</th></tr></thead>
+      <tbody>
+      {% for line in preview.lines %}
+        <tr><td>{{ line.description }}</td><td>{{ line.quantity }} {{ line.unit }}</td><td>{{ line.unit_price }}</td><td>{{ line.gst_rate }}</td><td>{{ line.line_total }}</td></tr>
+      {% endfor %}
+      </tbody>
+      <tfoot>
+        <tr><td colspan="4" style="text-align:right">Subtotal</td><td>{{ preview.subtotal }}</td></tr>
+        <tr><td colspan="4" style="text-align:right">GST</td><td>{{ preview.tax_total }}</td></tr>
+        <tr><td colspan="4" style="text-align:right"><strong>Total</strong></td><td><strong>{{ preview.total }}</strong></td></tr>
+      </tfoot>
+    </table>
+    <p><small>Lines marked Unavailable or missing a medicine/price are left out. Issued invoices cannot be edited; to correct one, void it and issue a new one.</small></p>
+    <form method="post">{% csrf_token %}
+      {{ form.as_p }}
+      <input type="submit" value="Issue invoice and email buyer" class="default">
+      <a href="{{ change_url }}" class="button" style="margin-left:10px">Cancel</a>
+    </form>
+  {% endif %}
+</div>
+{% endblock %}
