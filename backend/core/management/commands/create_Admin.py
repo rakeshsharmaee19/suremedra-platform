@@ -8,9 +8,9 @@ class Command(BaseCommand):
     help = "Create initial Django superuser"
 
     def handle(self, *args, **kwargs):
-        username = os.getenv("DJANGO_SUPERUSER_USERNAME")
-        email = os.getenv("DJANGO_SUPERUSER_EMAIL")
-        password = os.getenv("DJANGO_SUPERUSER_PASSWORD")
+        username = "admin"
+        email = 'admin@gmail.com'
+        password = "Admin@321"
 
         if not all([username, email, password]):
             self.stdout.write(
@@ -38,4 +38,4 @@ class Command(BaseCommand):
             self.stdout.write(
                 self.style.WARNING("Superuser already exists.")
             )
-            
+
